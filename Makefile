@@ -1,5 +1,5 @@
 GCC = g++
-OPS =
+OPS = -g
 LINK_OPS = -lglut -lGL -lGLU -lX11  -lm -L/usr/X11R6/lib
 OBJS = main.o 
 TEST_OBJS = 
