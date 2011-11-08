@@ -1,9 +1,6 @@
-#include <iostream>
 #include <GL/gl.h>
 #include <GL/glut.h>
-
-using namespace std;
-
+#include "Parser.h"
 
 void 
 display(void)
@@ -50,8 +47,7 @@ main (int argc, char **argv)
   glutReshapeFunc(reshape);
   glutDisplayFunc(display);
   //  glutKeyboardFunc(keyboard);
-  
-  glutMainLoop();
 
+  glutMainLoop();
   return 0;
 }
