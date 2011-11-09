@@ -2,6 +2,8 @@
 #include <GL/glut.h>
 #include "Parser.h"
 
+Juego j;
+
 void 
 display(void)
 {
@@ -9,6 +11,7 @@ display(void)
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   gluLookAt (0.0, 8.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+
 
   glutPostRedisplay();
   glutSwapBuffers();
@@ -30,6 +33,10 @@ reshape (int w, int h)
 int 
 main (int argc, char **argv) 
 {
+  /* Abrir archivo e inicializar estructuras de juego */
+  char *archivo = argv[1];
+  j = parse(archivo);
+
   /* Inicialización de ventana */
   glutInit(&argc, argv);
   glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB |  GLUT_DEPTH);
@@ -47,7 +54,8 @@ main (int argc, char **argv)
   glutReshapeFunc(reshape);
   glutDisplayFunc(display);
   //  glutKeyboardFunc(keyboard);
-
   glutMainLoop();
-  return 0;
+
+
+  exit (EXIT_SUCCESS);
 }
