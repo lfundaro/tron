@@ -1,5 +1,9 @@
+modelos
 Proyecto2.pdf
 tron
 *.o
 semantic.cache
 test
+test.c
+tinyxml
+*.tar.gz
