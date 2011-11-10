@@ -1,7 +1,7 @@
 GCC = g++
 OPS = -g
 LINK_OPS = -lglut -lGL -lGLU -lX11 -lxml2 -lm -L/usr/X11R6/lib
-OBJS = main.o Parser.o tinystr.o tinyxml.o tinyxmlerror.o tinyxmlparser.o
+OBJS = main.o Parser.o tinystr.o tinyxml.o tinyxmlerror.o tinyxmlparser.o ModeloDatos.o
 TEST_OBJS = 
 
 all: $(OBJS) Makefile
@@ -12,6 +12,9 @@ main.o : main.cpp
 
 Parser.o : Parser.cpp
 	$(GCC) $(OPS) -c Parser.cpp
+
+ModeloDatos.o : ModeloDatos.cpp
+	$(GCC) $(OPS) -c ModeloDatos.cpp
 
 tinystr.o : tinystr.cpp
 	$(GCC) $(OPS) -c tinystr.cpp

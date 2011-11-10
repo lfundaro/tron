@@ -2,10 +2,12 @@
 #define MODELODATOS_H
 
 #include <vector>
+#include <stdlib.h>
+#include <iostream>
 
 using namespace std;
 
-enum tipoObjeto {MAYA, CUBO, NODEF};
+enum tipoObjeto {MAYA, CUBO, ESFERA, NODEF};
 
 class Punto
 {
@@ -26,29 +28,33 @@ class Punto
       x = a;
       y = b;
     }
+
+  void Print();
 };
 
 class Trayectoria
 {
  public:
-  int velocidad;
+  double velocidad;
   int numPuntos;
   vector<Punto> listaPuntos;
 
   // Constructor por defecto
   Trayectoria()
     {
-      velocidad = 0;
+      velocidad = 0.0;
       numPuntos = 0;
       listaPuntos = vector<Punto>();
     }
 
-  Trayectoria(int vel, int npuntos, int tamLista)
+  Trayectoria(double vel, int npuntos, vector<Punto> lstPuntos)
     {
       velocidad = vel;
       numPuntos = npuntos;
-      listaPuntos = vector<Punto>(tamLista, Punto());
+      listaPuntos = lstPuntos;
     }
+
+  void Print();
 };
 
 class Objeto
@@ -65,6 +71,8 @@ class Objeto
     {
       tipo = t;
     }
+
+  virtual void Print();
 };
 
 class ObjetoMaya: public Objeto
@@ -78,6 +86,10 @@ class ObjetoMaya: public Objeto
   ObjetoMaya(enum tipoObjeto t, char *nArchivo, 
              Punto x) : Objeto(t), rutaArchivo(nArchivo),
     p(x) {}
+
+  ~ObjetoMaya() {free(rutaArchivo);}
+
+  virtual void Print();
 };
 
 class ObjetoCubo: public Objeto
@@ -90,6 +102,22 @@ class ObjetoCubo: public Objeto
 
  ObjetoCubo(enum tipoObjeto t, int tam, Punto x) :
   Objeto(t), tamano(tam), p(x) {}
+
+  virtual void Print();
+};
+
+class ObjetoEsfera: public Objeto
+{
+ public:
+  Punto p;
+  double radio;
+
+ ObjetoEsfera() : Objeto(), p(Punto()), radio(0.0) {}
+ 
+ ObjetoEsfera(enum tipoObjeto t, Punto pto, double rad) :
+  Objeto(t), p(pto), radio(rad) {}
+
+  virtual void Print();
 };
 
 class Jugador
@@ -109,15 +137,8 @@ class Jugador
       disparo = d;
       t = tr;
     }
-};
 
-class Contrincante : public Jugador
-{
- public:
-
- Contrincante() : Jugador() {}
-
- Contrincante(double d, Trayectoria tr) : Jugador(d,tr) {}
+  void Print();
 };
 
 class Nivel
@@ -127,7 +148,7 @@ class Nivel
   int tiempo;
   Jugador j;
   int numContrincantes;
-  vector<Contrincante> listaContrincantes;
+  vector<Jugador> listaContrincantes;
   int numObjetos;
   vector<Objeto> listaObjetos;
 
@@ -137,21 +158,25 @@ class Nivel
       tiempo = 0;
       j = Jugador();
       numContrincantes = 0;
-      listaContrincantes = vector<Contrincante>();
+      listaContrincantes = vector<Jugador>();
       numObjetos = 0;
       listaObjetos = vector<Objeto>();
     }
   
-  Nivel(int ident, int t, Jugador jug, int nContr, 
-        int nObjetos)
+  Nivel(int ident, int t, Jugador jug, int nContr,
+        vector<Jugador> listContr, int nObjetos,
+        vector<Objeto> listObj)
     {
       id = ident;
       tiempo = t;
-      jug = j;
+      j = jug;
       numContrincantes = nContr;
-      listaContrincantes = vector<Contrincante>(nContr, Contrincante());
-      listaObjetos = vector<Objeto>(numObjetos, Objeto());
+      listaContrincantes = listContr;
+      numObjetos = nObjetos;
+      listaObjetos = listObj;
     }
+
+  void Print();
 };
 
 class Juego
@@ -166,101 +191,13 @@ class Juego
       listaNiveles = vector<Nivel>();
     }
 
-  Juego(int nNiveles)
+  Juego(int nNiveles, vector<Nivel> lstNivel)
     {
       numNiveles = nNiveles;
-      listaNiveles = vector<Nivel>(nNiveles, Nivel());
+      listaNiveles = lstNivel;
     }
+
+  void Print();
 };
 
 #endif
-
-
-/* struct Nivel */
-/* { */
-/*   int id; */
-/*   int tiempo; */
-/*   Jugador j; */
-/*   int numContrincantes; */
-/*   ListaContrincantes *listaContrincantes; */
-/*   int numObjetos; */
-/*   ListaObjetos *listaObjetos; */
-/* }; */
-
-
-/* struct Jugador  */
-/* { */
-/*   double disparo; */
-/*   Trayectoria t; */
-/* }; */
-
-
-/* struct ListaNiveles */
-/* { */
-/*   Nivel x; */
-/*   ListaNiveles *next; */
-/* }; */
-
-/* struct Juego  */
-/* { */
-/*   int numNiveles; */
-/*   ListaNiveles *niveles; */
-/* }; */
-
-
-/* struct ObjetoMaya  */
-/* { */
-/*   enum tipoObjeto tipo; */
-/*   char *rutaArchivo; */
-/*   Punto p; */
-/* }; */
-
-/* struct ObjetoCubo */
-/* { */
-/*   enum tipoObjeto tipo; */
-/*   Punto p; */
-/*   int tamano; */
-/* }; */
-
-/* union Objeto */
-/* { */
-/*   struct ObjetoMaya om; */
-/*   struct ObjetoCubo oc; */
-/* }; */
-
-/* struct ListaObjetos */
-/* { */
-/*   Objeto obj; */
-/*   Objeto *next; */
-/* }; */
-
-
-/* struct Contrincante */
-/* { */
-/*   double disparo; */
-/*   Trayectoria t; */
-/* }; */
-
-
-/* struct ListaContrincantes */
-/* { */
-/*   Contrincante x; */
-/*   Contrincante *next; */
-/* }; */
-
-
-
-/* struct Punto */
-/* { */
-/*   int x; */
-/*   int y; */
-/* }; */
-
-
-
-/* struct Trayectoria */
-/* { */
-/*   int velocidad; */
-/*   int numPuntos; */
-/*   vector<Punto> listaPuntos; */
-/* }; */
