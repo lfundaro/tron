@@ -1,7 +1,7 @@
 GCC = g++
 OPS = -g
 LINK_OPS = -lglut -lGL -lGLU -lX11 -lxml2 -lm -L/usr/X11R6/lib
-OBJS = main.o Parser.o tinystr.o tinyxml.o tinyxmlerror.o tinyxmlparser.o ModeloDatos.o
+OBJS = main.o Parser.o tinystr.o tinyxml.o tinyxmlerror.o tinyxmlparser.o ModeloDatos.o Elementos.o
 TEST_OBJS = 
 
 all: $(OBJS) Makefile
@@ -27,6 +27,9 @@ tinyxmlerror.o: tinyxmlerror.cpp
 
 tinyxmlparser.o: tinyxmlparser.cpp
 	$(GCC) $(OPS) -c tinyxmlparser.cpp
+
+Elementos.o: Elementos.cpp
+	$(GCC) $(OPS) -c Elementos.cpp
 
 clean:
 	rm -rf tron test .\#* \#* *.o .*~ *~ *.gch semantic.cache
