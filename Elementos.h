@@ -4,3 +4,6 @@
 
 void
 dibujarTablero(float x,float y);
+
+void
+dibujarMira(double x, double y, float r, float g, float b);

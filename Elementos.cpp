@@ -70,9 +70,9 @@ dibujarBase(float x, float y)
   glColor3f(0.5,0.5,0.5);
   glBegin(GL_QUADS);
   glVertex3d(0.0,0.0,0.0);
-  glVertex3d(0.0,y,0.0);
-  glVertex3d(x,y,0.0);
   glVertex3d(x,0.0,0.0);
+  glVertex3d(x,y,0.0);
+  glVertex3d(0.0,y,0.0);
   glEnd();
   glPopMatrix();
 }
@@ -82,4 +82,14 @@ dibujarTablero(float x,float y)
   dibujarBorde(x,y);
   dibujarLineas(x,y);
   dibujarBase(x,y);
+}
+
+void
+dibujarMira(double x, double y, float r, float g, float b)
+{
+  glPushMatrix();
+  glTranslatef((float) ceil(x) - 0.5,(float) ceil(y)-0.5,0.5);
+  glColor3f(r,g,b);
+  glutSolidCube(1);
+  glPopMatrix();
 }
