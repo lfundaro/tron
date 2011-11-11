@@ -1,6 +1,6 @@
 GCC = g++
 OPS = -g
-LINK_OPS = -lglut -lGL -lGLU -lX11 -lxml2 -lm -L/usr/X11R6/lib
+LINK_OPS = -lglut -lGL -lGLU -lX11  -lm -L/usr/X11R6/lib
 OBJS = main.o Parser.o tinystr.o tinyxml.o tinyxmlerror.o tinyxmlparser.o ModeloDatos.o Elementos.o GLCamera.o ICP.o TriMesh_io.o KDtree.o TriMesh_normals.o TriMesh_bounding.o TriMesh_connectivity.o TriMesh_curvature.o TriMesh_grid.o TriMesh_pointareas.o TriMesh_stats.o TriMesh_tstrips.o remove.o reorder_verts.o
 TEST_OBJS = 
 
