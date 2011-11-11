@@ -230,7 +230,7 @@ void draw_mesh(int i)
 // Draw the scene
 void redraw()
 {
-	camera.setupGL(global_xf * global_bsph.center, global_bsph.r);
+  //camera.setupGL(global_xf * global_bsph.center, global_bsph.r);
 	glPushMatrix();
 	glMultMatrixd(global_xf);
     //	cls();
@@ -242,8 +242,8 @@ void redraw()
 	}
 
 	glPopMatrix();
-    //	glutSwapBuffers();
-	fflush(stdout);
+    glutSwapBuffers();
+    //	fflush(stdout);
 }
 
 
@@ -279,24 +279,6 @@ void update_bsph()
 	}
 }
 
-
-// Set the view...
-void resetview()
-{
-	camera.stopspin();
-
-	// Reload mesh xforms
-	for (int i = 0; i < meshes.size(); i++)
-		if (!xforms[i].read(xfname(filenames[i])))
-			xforms[i] = xform();
-
-	update_bsph();
-
-	// Set camera to first_mesh.camxf if we have it, else default
-	if (!global_xf.read(replace_ext(filenames[0], "camxf")))
-		global_xf = xform::trans(0, 0, -5.0f * global_bsph.r) *
-			    xform::trans(-global_bsph.center);
-}
 
 // ICP
 void do_icp(int n)
@@ -344,7 +326,10 @@ display(void)
   /* Tablero */
   dibujarMira(mouJueX,mouJueY,1.0,0.0,1.0);
   dibujarTablero(tamX,tamY);
-  //redraw();
+  glPushMatrix();
+  glScalef(10.0,10.0,10.0);
+  redraw();
+  glPopMatrix();
   glutPostRedisplay();
   glutSwapBuffers();
   glFlush ();
@@ -381,7 +366,7 @@ proyectarMouse(int x, int y)
   mouJueX = posX;
   mouJueY = posY;
   mouJueZ = posZ;
-  printf("(%f,%f,%f) y ",posX,posY,posZ);
+  //  printf("(%f,%f,%f) y ",posX,posY,posZ);
 }
 
 void
@@ -408,7 +393,7 @@ moverMouse(int x, int y)
   mouVenX = x;
   mouVenY = y;
   proyectarMouse(x,y);
-  printf("(%d,%d)\n",x,y);
+  //  printf("(%d,%d)\n",x,y);
 }
 
 void
@@ -420,7 +405,7 @@ accionMouse(int key, int state, int x, int y)
    switch(state){
    case GLUT_UP:
      proyectarMouse(x,y);
-     printf("Dispare en (%d,%d)\n",x,y);
+     //     printf("Dispare en (%d,%d)\n",x,y);
      break;
    }
    break;
@@ -471,7 +456,6 @@ main (int argc, char **argv)
   glutMotionFunc(moverMouse);
   glutPassiveMotionFunc(moverMouse);
   //glutKeyboardFunc(keyboard);
-  //  resetview();
   glutMainLoop();
 
   exit (EXIT_SUCCESS);
