@@ -344,7 +344,7 @@ display(void)
   /* Tablero */
   dibujarMira(mouJueX,mouJueY,1.0,0.0,1.0);
   dibujarTablero(tamX,tamY);
-  redraw();
+  //redraw();
   glutPostRedisplay();
   glutSwapBuffers();
   glFlush ();
