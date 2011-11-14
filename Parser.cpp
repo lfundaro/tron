@@ -4,10 +4,10 @@ Punto parsePunto(TiXmlHandle rootPunto)
 {
   // Punto x
   TiXmlElement *pElem = rootPunto.FirstChild("x").Element();
-  int x = atoi(pElem->GetText());
+  int x = atof(pElem->GetText());
   // Punto y
   pElem = rootPunto.FirstChild("y").Element();
-  int y = atoi(pElem->GetText());
+  int y = atof(pElem->GetText());
   Punto pto(x,y);
   return pto;
 }
