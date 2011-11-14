@@ -301,8 +301,8 @@ void do_icp(int n)
 
 
 Juego j;
-float tamX = 10.0;
-float tamY = 10.0;
+float tamX = 100.0;
+float tamY = 100.0;
 float giro = 0;
 int mouVenX = 0;
 int mouVenY = 0;
@@ -326,10 +326,10 @@ display(void)
   /* Tablero */
   dibujarMira(mouJueX,mouJueY,1.0,0.0,1.0);
   dibujarTablero(tamX,tamY);
-  glPushMatrix();
-  glScalef(10.0,10.0,10.0);
-  redraw();
-  glPopMatrix();
+  //  redraw();
+  // Dibujar trayectoria de Jugador
+  j.listaNiveles[0].j.dibujarTrayectoriaJ();
+  j.listaNiveles[0].dibujarTrayectoriaC();
   glutPostRedisplay();
   glutSwapBuffers();
   glFlush ();
@@ -421,23 +421,24 @@ main (int argc, char **argv)
   /* Inicialización de ventana */
   glutInit(&argc, argv);
   glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB |  GLUT_DEPTH);
-  glutInitWindowSize (800, 600);
+  //  glutInitWindowSize (800, 600);
+  glutInitWindowSize (1280, 800);
   glutInitWindowPosition (100, 150);
 
 
   /* Cargar figura .ply */ 
 
-  const char *filename = argv[2];
-  TriMesh *themesh = TriMesh::read(filename);
-  // if (!themesh)
-  //   usage(argv[0]);
-  themesh->need_normals();
-  themesh->need_tstrips();
-  themesh->need_bsphere();
-  meshes.push_back(themesh);
-  xforms.push_back(xform());
-  visible.push_back(true);
-  filenames.push_back(filename);
+  // const char *filename = argv[2];
+  // TriMesh *themesh = TriMesh::read(filename);
+  // // if (!themesh)
+  // //   usage(argv[0]);
+  // themesh->need_normals();
+  // themesh->need_tstrips();
+  // themesh->need_bsphere();
+  // meshes.push_back(themesh);
+  // xforms.push_back(xform());
+  // visible.push_back(true);
+  // filenames.push_back(filename);
   
 
   glutCreateWindow (argv[0]);

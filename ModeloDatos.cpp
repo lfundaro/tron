@@ -2,6 +2,67 @@
 
 using namespace std;
 
+// Getters y setters de trayectoria
+double Trayectoria::getVelocidad() 
+{
+  return velocidad;
+}
+
+int Trayectoria::getNumPuntos()
+{
+  return numPuntos;
+}
+
+// Getters y setters de Punto
+double Punto::getX()
+{
+  return x;
+}
+
+double Punto::getY()
+{
+  return y;
+}
+
+
+// Dibujar trayectoria de jugador
+void Jugador::dibujarTrayectoriaJ() 
+{
+  if (t.numPuntos == 1) { 
+    glPushMatrix();
+    glColor3f(1.0,0.0,0.0);
+    glPointSize(10);
+    glBegin(GL_POINTS);
+    glVertex3f(t.listaPuntos[0].getX(), t.listaPuntos[0].getY(), 0.0);
+    glEnd();
+    glPopMatrix();
+  }
+  else
+    {
+      glColor3f(1.0,1.0,0.0);
+      glPushMatrix();
+      glLineWidth(5);
+      glBegin(GL_LINE_LOOP);
+      for (int i = 0; i < t.numPuntos - 1; i++) 
+        {
+          glVertex3f(t.listaPuntos[i].getX(), t.listaPuntos[i].getY(), 0.0);
+          glVertex3f(t.listaPuntos[i+1].getX(), t.listaPuntos[i+1].getY(), 0.0);
+        }
+      glEnd();
+      glPopMatrix();
+    }
+  return;
+}
+
+// Dibuja trayectoria de contrincante
+void Nivel::dibujarTrayectoriaC()
+{
+  for(int i = 0; i < numContrincantes; i++) 
+    {
+      listaContrincantes[i].dibujarTrayectoriaJ();
+    }
+}
+
 void Punto::Print() 
 {
   cout << "Punto" << endl;

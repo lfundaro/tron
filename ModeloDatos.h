@@ -4,6 +4,9 @@
 #include <vector>
 #include <stdlib.h>
 #include <iostream>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
 
 using namespace std;
 
@@ -12,8 +15,8 @@ enum tipoObjeto {MAYA, CUBO, ESFERA, NODEF};
 class Punto
 {
  public:
-  int x;
-  int y;
+  double x;
+  double y;
 
   // Constructor por defecto
   Punto() 
@@ -23,12 +26,14 @@ class Punto
     }
 
   // Constructor
-  Punto(int a, int b)
+  Punto(double a, double b)
     {
       x = a;
       y = b;
     }
-
+  
+  double getX();
+  double getY();
   void Print();
 };
 
@@ -53,6 +58,9 @@ class Trayectoria
       numPuntos = npuntos;
       listaPuntos = lstPuntos;
     }
+
+  double getVelocidad();
+  int getNumPuntos();
 
   void Print();
 };
@@ -139,6 +147,8 @@ class Jugador
     }
 
   void Print();
+
+  void dibujarTrayectoriaJ();
 };
 
 class Nivel
@@ -176,6 +186,7 @@ class Nivel
       listaObjetos = listObj;
     }
 
+  void dibujarTrayectoriaC();
   void Print();
 };
 
