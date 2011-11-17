@@ -85,7 +85,7 @@ class Trayectoria
   void lambdaReset();
   double ecuacionRectaX();
   double ecuacionRectaY();
-  int cambiarOrigen(Punto posActual);
+  int cambiarOrigen();
   void calcularNuevaPosicion(Punto *posActual);
   double normalizarV(double velocidad);
   double xDeLaRecta(Punto posActual);

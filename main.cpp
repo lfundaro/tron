@@ -300,8 +300,8 @@ void do_icp(int n)
 /* Fin Código Trimesh */
 
 Juego j;
-float tamX = 70.0;
-float tamY = 20.0;
+float tamX = 90.0;
+float tamY = 90.0;
 float giroH = 0;
 float giroV = 0;
 int mouVenX = 0;
