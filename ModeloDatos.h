@@ -8,6 +8,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <math.h>
+#include <time.h>
 
 using namespace std;
 
@@ -52,6 +53,7 @@ class Trayectoria
   double y_1;
   double lambdaX;
   double lambdaY;
+  time_t timeStamp;
 
   // Constructor por defecto
   Trayectoria()
@@ -64,6 +66,7 @@ class Trayectoria
       y_1 = 0.0;
       lambdaX = 0.0;
       lambdaY = 0.0;
+      time(&timeStamp);
     }
 
   Trayectoria(double vel, int npuntos, vector<Punto> lstPuntos)
@@ -76,6 +79,7 @@ class Trayectoria
       y_1 = listaPuntos[origen].getY();
       lambdaX = 0.0;
       lambdaY = 0.0;
+      time(&timeStamp);
     }
 
   void set_x_1(double val);
@@ -94,7 +98,7 @@ class Trayectoria
   double getVelocidad();
   int getNumPuntos();
   void calcularTrayectoria(Punto *p);
-
+  double calcDesp(double velocidad);
   void Print();
 };
 

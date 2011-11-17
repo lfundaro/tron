@@ -58,9 +58,26 @@ double Trayectoria::normalizarV(double velocidad)
   return velocidad / d;
 }
 
+double Trayectoria::calcDesp(double velocidad)
+{
+  double desp = 0.0;
+  ///  if (timeStamp) 
+  //    {
+      time_t now;
+      time(&now);
+      double difft = difftime(now,timeStamp);
+      cout << "diferenciaT = " << difft << endl;
+      desp = velocidad*(difft);
+      cout << "desplazamiento " << desp << endl;
+      //    }
+  time(&timeStamp);
+  return desp;
+}
+
 double Trayectoria::ecuacionRectaX()
 {
-  double diff = normalizarV(/*velocidad*1.0/60.0*/0.2);
+  double desplazamientoX = calcDesp(velocidad);
+  double diff = normalizarV(desplazamientoX);
   double x_prima = listaPuntos[origen].getX() + (lambdaX + diff)*
     (listaPuntos[(origen + 1) % numPuntos].getX() - listaPuntos[origen].getX()); 
   actLambdaX(diff);
@@ -69,7 +86,8 @@ double Trayectoria::ecuacionRectaX()
 
 double Trayectoria::ecuacionRectaY()
 {
-  double diff = normalizarV(/*velocidad*1.0/60.0*/0.2);
+  double desplazamientoY = calcDesp(velocidad);
+  double diff = normalizarV(desplazamientoY);
   double y_prima = listaPuntos[origen].getY() + (lambdaY + diff)*
     (listaPuntos[(origen + 1) % numPuntos].getY() - listaPuntos[origen].getY()); 
   actLambdaY(diff);
