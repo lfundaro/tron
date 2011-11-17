@@ -7,6 +7,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+#include <math.h>
 
 using namespace std;
 
@@ -34,6 +35,8 @@ class Punto
   
   double getX();
   double getY();
+  void setX(double val);
+  void setY(double val);
   void Print();
 };
 
@@ -43,6 +46,12 @@ class Trayectoria
   double velocidad;
   int numPuntos;
   vector<Punto> listaPuntos;
+  int origen;
+  double pendiente;
+  double x_1;
+  double y_1;
+  double lambdaX;
+  double lambdaY;
 
   // Constructor por defecto
   Trayectoria()
@@ -50,6 +59,11 @@ class Trayectoria
       velocidad = 0.0;
       numPuntos = 0;
       listaPuntos = vector<Punto>();
+      origen = 0;
+      x_1 = 0.0;
+      y_1 = 0.0;
+      lambdaX = 0.0;
+      lambdaY = 0.0;
     }
 
   Trayectoria(double vel, int npuntos, vector<Punto> lstPuntos)
@@ -57,10 +71,29 @@ class Trayectoria
       velocidad = vel;
       numPuntos = npuntos;
       listaPuntos = lstPuntos;
+      origen = 0;
+      x_1 = listaPuntos[origen].getX();
+      y_1 = listaPuntos[origen].getY();
+      lambdaX = 0.0;
+      lambdaY = 0.0;
     }
 
+  void set_x_1(double val);
+  void set_y_1(double val);
+  void actLambdaX(double val);
+  void actLambdaY(double val);
+  void lambdaReset();
+  double ecuacionRectaX();
+  double ecuacionRectaY();
+  int cambiarOrigen(Punto posActual);
+  void calcularNuevaPosicion(Punto *posActual);
+  double normalizarV(double velocidad);
+  double xDeLaRecta(Punto posActual);
+  double yDeLaRecta(Punto posActual);
+  void calcularPendiente();
   double getVelocidad();
   int getNumPuntos();
+  void calcularTrayectoria(Punto *p);
 
   void Print();
 };
@@ -133,21 +166,25 @@ class Jugador
  public:
   double disparo;
   Trayectoria t;
+  Punto posActual;
 
   Jugador() 
     {
       disparo = 0.0;
       t = Trayectoria();
+      posActual = Punto();
     }
 
-  Jugador(double d, Trayectoria tr)
+  Jugador(double d, Trayectoria tr, Punto ini)
     {
       disparo = d;
       t = tr;
+      posActual = ini;
     }
 
   void Print();
 
+  void dibujarJugador(double *incr);
   void dibujarTrayectoriaJ();
 };
 
@@ -187,6 +224,7 @@ class Nivel
     }
 
   void dibujarTrayectoriaC();
+  void dibujarJugadores(double *incr);
   void Print();
 };
 
