@@ -312,6 +312,8 @@ double mouJueZ = 1;
 int nivelActual = 0;
 Punto posActualJugador;
 vector<Punto> posContrincante;
+float zoom = 90.0;
+#define ZOOM_FACTOR 1.0
 
 void
 display(void)
@@ -364,7 +366,8 @@ reshape (int w, int h)
   glViewport (0, 0, (GLsizei) w, (GLsizei) h);
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(90.0f, 1, 0.5, 100.0);
+  //  gluPerspective(90.0f, 1, 0.5, 100.0);
+  gluPerspective(zoom, 1, 0.5, 100.0);
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -445,6 +448,24 @@ void teclaPausa()
   sleep(5);
 }
 
+void teclaZoomIn()
+{
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  zoom += ZOOM_FACTOR;
+  gluPerspective(zoom, 1, 0.5, 100.0);
+  glMatrixMode(GL_MODELVIEW);
+}
+
+void teclaZoomOut()
+{
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  zoom -= ZOOM_FACTOR;
+  gluPerspective(zoom, 1, 0.5, 100.0);
+  glMatrixMode(GL_MODELVIEW);
+}
+
 void
 keyboard (unsigned char key, int x, int y) 
 {
@@ -453,6 +474,12 @@ keyboard (unsigned char key, int x, int y)
     case 'P': case 'p':
       teclaPausa();
       glutPostRedisplay();
+      break;
+    case 'I': case 'i':
+      teclaZoomIn();
+      break;
+    case 'O': case 'o':
+      teclaZoomOut();
       break;
     default:
       printf("Didnt match\n");
