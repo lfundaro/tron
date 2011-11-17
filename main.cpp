@@ -300,9 +300,10 @@ void do_icp(int n)
 /* Fin Código Trimesh */
 
 Juego j;
-float tamX = 90.0;
-float tamY = 90.0;
-float giro = 0;
+float tamX = 70.0;
+float tamY = 20.0;
+float giroH = 0;
+float giroV = 0;
 int mouVenX = 0;
 int mouVenY = 0;
 double mouJueX = tamX/2;
@@ -320,14 +321,25 @@ display(void)
   glMatrixMode(GL_MODELVIEW);
   /* Coordenad=as del sistema */
   glLoadIdentity();
-  //  gluLookAt (0.0, (-x)/10.0,(-x)/10*6, 0.0,(-y)/20.0,(-x)/3.0, 0.0, 0.0,-1.0);
-  gluLookAt (0.0, (-tamX)/10, (tamY)/10*6,
-             0.0+giro, (-tamY)/20, (-tamX)/3,
-             0.0, 1.0, 0.0);
+  //gluLookAt (0.0, (-x)/10.0,(-x)/10*6, 0.0,(-y)/20.0,(-x)/3.0, 0.0, 0.0,-1.0);
+  if (tamX == tamY) {
+  gluLookAt (0.0, (-(tamX+2))/10, (tamY+2)/10*6,
+             0.0+giroH, giroV+(-(tamY+2))/20, (-(tamX+2))/3,
+             0.0,1, 0.0);
+  } else if (tamX < tamY) {
+  gluLookAt (0.0, (-(tamY+2))/10, (tamY+2)/10*6,
+             0.0+giroH, giroV+(-(tamY+2))/20, (-(tamY+2))/3,
+             0.0,1, 0.0);
+  } else {
+  gluLookAt (0.0, (-(tamX+2))/10, (tamX+2)/10*6,
+             0.0+giroH, giroV+(-(tamX+2))/20, (-(tamX+2))/3,
+             0.0,1, 0.0);
+  }
+
   glTranslatef((-tamX)/2,(-tamY)/2,0.0);
 
   /* Tablero */
-  dibujarMira(mouJueX,mouJueY,1.0,0.0,1.0);
+  dibujarMira(mouJueX,mouJueY,1.0,1.0,0.0);
   dibujarTablero(tamX,tamY);
   //  redraw();
   // Dibujar trayectoria de Jugador
@@ -380,12 +392,20 @@ flechas(int key, int x, int y)
 {
   switch(key) {
   case GLUT_KEY_LEFT:
-    if (giro > -9)
-      giro -= 0.1;
+    if (giroH > -9)
+      giroH -= 0.1;
     break;
   case GLUT_KEY_RIGHT:
-    if (giro < 9)
-      giro += 0.1;
+    if (giroH < 9)
+      giroH += 0.1;
+    break;
+  case GLUT_KEY_DOWN:
+    if (giroV > -9)
+      giroV -= 0.1;
+    break;
+  case GLUT_KEY_UP:
+    if (giroV < 9)
+      giroV += 0.1;
     break;
   }
   mouVenX = x;
@@ -448,8 +468,7 @@ main (int argc, char **argv)
   /* Inicialización de ventana */
   glutInit(&argc, argv);
   glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB |  GLUT_DEPTH);
-  //  glutInitWindowSize (800, 600);
-  glutInitWindowSize (1280, 800);
+  glutInitWindowSize (1280,800);
   glutInitWindowPosition (100, 150);
 
 
