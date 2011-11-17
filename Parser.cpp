@@ -52,13 +52,13 @@ Jugador parseContrincante(TiXmlHandle rootContrincante)
   return parseJugador(rootContrincante);
 }
 
-vector<Objeto> parseObjetos(TiXmlHandle rootObjetos) 
+vector<Objeto*> parseObjetos(TiXmlHandle rootObjetos) 
 {
   // cantidad 
   TiXmlElement *pElem = rootObjetos.FirstChild("cantidad").Element();
    int cant = atoi(pElem->GetText());
   // objetos
-  vector<Objeto> listObjetos;
+  vector<Objeto*> listObjetos;
   int i = 0;
   for(TiXmlElement *nodoObjeto = rootObjetos.FirstChild("objeto").Element();
       i < cant; nodoObjeto = nodoObjeto->NextSiblingElement())
@@ -78,7 +78,7 @@ vector<Objeto> parseObjetos(TiXmlHandle rootObjetos)
           int y = atoi(pElem->GetText());
           Punto pto(x,y);
           enum tipoObjeto tipo = MAYA;
-          ObjetoMaya objMaya(tipo,archivo,pto);
+          ObjetoMaya *objMaya = new ObjetoMaya(tipo,archivo,pto);
           listObjetos.push_back(objMaya);
         }
       else if // Objeto es cubo ?
@@ -97,7 +97,7 @@ vector<Objeto> parseObjetos(TiXmlHandle rootObjetos)
           pElem = rootCubo.FirstChild("tamano").Element();
           int tam = atoi(pElem->GetText());
           enum tipoObjeto tipo = CUBO;
-          ObjetoCubo objCubo(tipo,tam,pto);
+          ObjetoCubo *objCubo = new ObjetoCubo(tipo,tam,pto);
           listObjetos.push_back(objCubo);
         }
       else  // Objeto es esfera
@@ -115,7 +115,7 @@ vector<Objeto> parseObjetos(TiXmlHandle rootObjetos)
           pElem = rootEsfera.FirstChild("radio").Element();
           double rad = atof(pElem->GetText());
           enum tipoObjeto tipo = ESFERA;
-          ObjetoEsfera objEsf(tipo,pto,rad);
+          ObjetoEsfera *objEsf = new ObjetoEsfera(tipo,pto,rad);
           listObjetos.push_back(objEsf);
         }
       i++;
@@ -158,7 +158,7 @@ Nivel parseNivel(TiXmlHandle rootNivel)
   // Lista de objetos
   pElem = rootNivel.FirstChild("objetos").Element();
   TiXmlHandle rootObjetos(pElem);
-  vector<Objeto> listaObjetos = parseObjetos(rootObjetos);
+  vector<Objeto*> listaObjetos = parseObjetos(rootObjetos);
   // Crear Nivel 
   Nivel nv(ident,tmpJuego,jug,numContr,listaContr,cantObjetos,listaObjetos);
   return nv;

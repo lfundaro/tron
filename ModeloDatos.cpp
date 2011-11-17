@@ -158,6 +158,56 @@ void Nivel::dibujarJugadores(double *incr)
     }
 }
 
+void Objeto::dibujarMaya() {}
+
+void Objeto::dibujarCubo() {}
+
+void Objeto::dibujarEsfera() {}
+
+void ObjetoMaya::dibujarMaya() {}
+
+void ObjetoEsfera::dibujarEsfera()
+{
+  glPushMatrix();
+  glColor3f(0.0,0.8,0.4);
+  glTranslatef(p.getX(), p.getY(), 0.0);
+  glutSolidSphere(radio, 20, 20);
+  glPopMatrix();
+  return;
+}
+
+void ObjetoCubo::dibujarCubo()
+{
+  glPushMatrix();
+  glColor3f(0.0,0.0,1.0);
+  glTranslatef(p.getX(), p.getY(), 0.0);
+  glScalef(tamano, tamano, 1.0);
+  glutSolidCube(1.0);
+  glPopMatrix(); 
+  return;
+}
+
+//Dibujar obstaculos
+void Nivel::dibujarObstaculos()
+{
+  for(int i = 0; i < numObjetos; i++) 
+    {
+      enum tipoObjeto t = listaObjetos[i]->tipo;
+      if (t == CUBO)
+        {
+          ObjetoCubo *objC = (dynamic_cast <ObjetoCubo*> (listaObjetos[i]));
+          objC->dibujarCubo();
+        }
+      else if (t == ESFERA) 
+        {
+          ObjetoEsfera *objF = (dynamic_cast <ObjetoEsfera*> (listaObjetos[i]));
+          objF->dibujarEsfera();
+        }
+      else if (t == MAYA) 
+        continue;
+    }
+}
+
 // Dibujar trayectoria de jugador
 void Jugador::dibujarTrayectoriaJ() 
 {
@@ -263,10 +313,10 @@ void Nivel::Print()
       (*it).Print();
     }
   cout << "NumObjetos = " << numObjetos << endl;
-  for(vector<Objeto>::iterator it = listaObjetos.begin();
+  for(vector<Objeto*>::iterator it = listaObjetos.begin();
       it != listaObjetos.end(); ++it)
     {
-      (*it).Print();
+      (*it)->Print();
     }
 }
 

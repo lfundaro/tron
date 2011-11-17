@@ -347,6 +347,8 @@ display(void)
   j.listaNiveles[nivelActual].dibujarTrayectoriaC();
   // Dibujar jugadores en posición inicial
   j.listaNiveles[nivelActual].dibujarJugadores(&incr);
+  // Dibujar obstáculos
+  j.listaNiveles[nivelActual].dibujarObstaculos();
   //  sleep(2);
   glutPostRedisplay();
   glutSwapBuffers();

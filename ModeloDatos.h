@@ -117,6 +117,9 @@ class Objeto
     }
 
   virtual void Print();
+  virtual void dibujarEsfera();
+  virtual void dibujarCubo();
+  virtual void dibujarMaya();
 };
 
 class ObjetoMaya: public Objeto
@@ -134,6 +137,7 @@ class ObjetoMaya: public Objeto
   ~ObjetoMaya() {free(rutaArchivo);}
 
   virtual void Print();
+  void dibujarMaya();
 };
 
 class ObjetoCubo: public Objeto
@@ -148,6 +152,7 @@ class ObjetoCubo: public Objeto
   Objeto(t), tamano(tam), p(x) {}
 
   virtual void Print();
+  void dibujarCubo();
 };
 
 class ObjetoEsfera: public Objeto
@@ -162,6 +167,7 @@ class ObjetoEsfera: public Objeto
   Objeto(t), p(pto), radio(rad) {}
 
   virtual void Print();
+  void dibujarEsfera();
 };
 
 class Jugador
@@ -200,7 +206,7 @@ class Nivel
   int numContrincantes;
   vector<Jugador> listaContrincantes;
   int numObjetos;
-  vector<Objeto> listaObjetos;
+  vector<Objeto*> listaObjetos;
 
   Nivel() 
     {
@@ -210,12 +216,12 @@ class Nivel
       numContrincantes = 0;
       listaContrincantes = vector<Jugador>();
       numObjetos = 0;
-      listaObjetos = vector<Objeto>();
+      listaObjetos = vector<Objeto*>();
     }
   
   Nivel(int ident, int t, Jugador jug, int nContr,
         vector<Jugador> listContr, int nObjetos,
-        vector<Objeto> listObj)
+        vector<Objeto*> listObj)
     {
       id = ident;
       tiempo = t;
@@ -228,6 +234,7 @@ class Nivel
 
   void dibujarTrayectoriaC();
   void dibujarJugadores(double *incr);
+  void dibujarObstaculos();
   void Print();
 };
 
