@@ -91,9 +91,8 @@ class Trayectoria
   double ecuacionRectaY();
   int cambiarOrigen();
   void calcularNuevaPosicion(Punto *posActual);
-  double normalizarV(double velocidad);
-  double xDeLaRecta(Punto posActual);
-  double yDeLaRecta(Punto posActual);
+  double normalizarD(double desplazamiento);
+  void ecuacionRecta(Punto *posActual);
   void calcularPendiente();
   double getVelocidad();
   int getNumPuntos();

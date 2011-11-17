@@ -49,7 +49,7 @@ void Trayectoria::actLambdaY(double val)
   return;
 }
 
-double Trayectoria::normalizarV(double velocidad)
+double Trayectoria::normalizarD(double desplazamiento)
 {
   double d =sqrt(pow(listaPuntos[(origen + 1) % numPuntos].getX() - 
                      listaPuntos[origen].getX(),2) +
@@ -60,45 +60,44 @@ double Trayectoria::normalizarV(double velocidad)
 
 double Trayectoria::calcDesp(double velocidad)
 {
-  double desp = 0.0;
-  ///  if (timeStamp) 
-  //    {
-      time_t now;
-      time(&now);
-      double difft = difftime(now,timeStamp);
+  double desp = velocidad*1.0/60.0;
+  time_t now;
+  time(&now);
+  double difft = difftime(now,timeStamp);
+  if (difft >= 1.0) 
+    {
+      cout.precision(15);
       cout << "diferenciaT = " << difft << endl;
       desp = velocidad*(difft);
       cout << "desplazamiento " << desp << endl;
-      //    }
-  time(&timeStamp);
+      time(&timeStamp);
+    }
   return desp;
 }
 
-double Trayectoria::ecuacionRectaX()
+void Trayectoria::ecuacionRecta(Punto *posActual)
 {
-  double desplazamientoX = calcDesp(velocidad);
-  double diff = normalizarV(desplazamientoX);
-  double x_prima = listaPuntos[origen].getX() + (lambdaX + diff)*
-    (listaPuntos[(origen + 1) % numPuntos].getX() - listaPuntos[origen].getX()); 
-  actLambdaX(diff);
-  return x_prima;
-}
-
-double Trayectoria::ecuacionRectaY()
-{
-  double desplazamientoY = calcDesp(velocidad);
-  double diff = normalizarV(desplazamientoY);
-  double y_prima = listaPuntos[origen].getY() + (lambdaY + diff)*
-    (listaPuntos[(origen + 1) % numPuntos].getY() - listaPuntos[origen].getY()); 
-  actLambdaY(diff);
-  return y_prima;
+  cout.precision(15);
+  cout << "velocidad = " << velocidad << endl;
+  double desplazamiento = calcDesp(velocidad/**1/60.0*/);
+  if (desplazamiento > 0.0) {
+    double norm = normalizarD(desplazamiento);
+    double y_prima = listaPuntos[origen].getY() + (lambdaY + norm)*
+      (listaPuntos[(origen + 1) % numPuntos].getY() - listaPuntos[origen].getY()); 
+    actLambdaY(norm);
+    double x_prima = listaPuntos[origen].getX() + (lambdaX + norm)*
+      (listaPuntos[(origen + 1) % numPuntos].getX() - listaPuntos[origen].getX()); 
+    actLambdaX(norm);
+    posActual->setX(x_prima);
+    posActual->setY(y_prima);
+  }
+  return;
 }
 
 int Trayectoria::cambiarOrigen()
 {
   if (lambdaX >= 1.0 || lambdaY >= 1.0) 
     {
-      // Cambiar origen
       origen = (origen + 1) % numPuntos;
       return 1;
     }
@@ -107,8 +106,7 @@ int Trayectoria::cambiarOrigen()
 
 void Trayectoria::calcularNuevaPosicion(Punto *posActual)
 {
-  posActual->setX(ecuacionRectaX());
-  posActual->setY(ecuacionRectaY());
+  ecuacionRecta(posActual);
   return;
 }
 
@@ -150,10 +148,12 @@ void Jugador::dibujarJugador(double *incr)
 void Nivel::dibujarJugadores(double *incr)
 {
   // Dibujamos el jugador
+  cout << "Jugador" << endl;
   j.dibujarJugador(incr);
   // Dibujar contrincantes
   for(int i = 0; i < numContrincantes; i++) 
     {
+      cout << "Contrincante = " << i << endl;
       listaContrincantes[i].dibujarJugador(incr);
     }
 }
