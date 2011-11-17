@@ -78,7 +78,7 @@ vector<Objeto*> parseObjetos(TiXmlHandle rootObjetos)
           int y = atoi(pElem->GetText());
           Punto pto(x,y);
           enum tipoObjeto tipo = MAYA;
-          ObjetoMaya *objMaya = new ObjetoMaya(tipo,archivo,pto);
+          ObjetoMaya *objMaya = new ObjetoMaya(tipo,3,archivo,pto);
           listObjetos.push_back(objMaya);
         }
       else if // Objeto es cubo ?
@@ -97,7 +97,7 @@ vector<Objeto*> parseObjetos(TiXmlHandle rootObjetos)
           pElem = rootCubo.FirstChild("tamano").Element();
           int tam = atoi(pElem->GetText());
           enum tipoObjeto tipo = CUBO;
-          ObjetoCubo *objCubo = new ObjetoCubo(tipo,tam,pto);
+          ObjetoCubo *objCubo = new ObjetoCubo(tipo,3,tam,pto);
           listObjetos.push_back(objCubo);
         }
       else  // Objeto es esfera
@@ -115,7 +115,7 @@ vector<Objeto*> parseObjetos(TiXmlHandle rootObjetos)
           pElem = rootEsfera.FirstChild("radio").Element();
           double rad = atof(pElem->GetText());
           enum tipoObjeto tipo = ESFERA;
-          ObjetoEsfera *objEsf = new ObjetoEsfera(tipo,pto,rad);
+          ObjetoEsfera *objEsf = new ObjetoEsfera(tipo,3,pto,rad);
           listObjetos.push_back(objEsf);
         }
       i++;

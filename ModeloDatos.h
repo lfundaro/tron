@@ -10,6 +10,9 @@
 #include <math.h>
 #include <time.h>
 
+#define RAD_INT_TORUS 1.0
+#define RAD_EXT_TORUS 2.0
+
 using namespace std;
 
 enum tipoObjeto {MAYA, CUBO, ESFERA, NODEF};
@@ -39,6 +42,35 @@ class Punto
   void setX(double val);
   void setY(double val);
   void Print();
+};
+
+class Disco 
+{
+ public:
+  int tiroDirecto; 
+  int vida; 
+  int enCurso;
+  Punto posActual;
+
+  Disco() 
+    {
+      tiroDirecto = 1;
+      vida = 15;
+      enCurso = 0;
+      posActual = Punto();
+    }
+  
+  Disco(Punto pos) 
+    {
+      tiroDirecto = 1;
+      vida = 15;
+      enCurso = 0;
+      posActual = pos;
+    }
+
+  void decVida();
+  void cambiarModo();
+  void dibujarDisco(Punto posActual);
 };
 
 class Trayectoria
@@ -105,21 +137,25 @@ class Objeto
 {
  public:
   enum tipoObjeto tipo;
+  int vida;
 
   Objeto()
     {
       tipo = NODEF;
+      vida = 3;
     }
 
-  Objeto(enum tipoObjeto t) 
+  Objeto(enum tipoObjeto t, int v) 
     {
       tipo = t;
+      vida = v;
     }
 
   virtual void Print();
   virtual void dibujarEsfera();
   virtual void dibujarCubo();
   virtual void dibujarMaya();
+  void decVida();
 };
 
 class ObjetoMaya: public Objeto
@@ -130,8 +166,8 @@ class ObjetoMaya: public Objeto
 
  ObjetoMaya() : Objeto(), rutaArchivo(NULL), p(Punto()) {}
 
-  ObjetoMaya(enum tipoObjeto t, char *nArchivo, 
-             Punto x) : Objeto(t), rutaArchivo(nArchivo),
+ ObjetoMaya(enum tipoObjeto t, int vidas, char *nArchivo, 
+             Punto x) : Objeto(t,vidas), rutaArchivo(nArchivo),
     p(x) {}
 
   ~ObjetoMaya() {free(rutaArchivo);}
@@ -148,8 +184,8 @@ class ObjetoCubo: public Objeto
   
  ObjetoCubo() : Objeto(), tamano(0), p(Punto()) {}
 
- ObjetoCubo(enum tipoObjeto t, int tam, Punto x) :
-  Objeto(t), tamano(tam), p(x) {}
+ ObjetoCubo(enum tipoObjeto t, int vidas, int tam, Punto x) :
+  Objeto(t,vidas), tamano(tam), p(x) {}
 
   virtual void Print();
   void dibujarCubo();
@@ -163,8 +199,8 @@ class ObjetoEsfera: public Objeto
 
  ObjetoEsfera() : Objeto(), p(Punto()), radio(0.0) {}
  
- ObjetoEsfera(enum tipoObjeto t, Punto pto, double rad) :
-  Objeto(t), p(pto), radio(rad) {}
+ ObjetoEsfera(enum tipoObjeto t, int vidas, Punto pto, double rad) :
+  Objeto(t,vidas), p(pto), radio(rad) {}
 
   virtual void Print();
   void dibujarEsfera();
@@ -193,7 +229,7 @@ class Jugador
 
   void Print();
 
-  void dibujarJugador(double *incr);
+  void dibujarJugador();
   void dibujarTrayectoriaJ();
 };
 
@@ -207,6 +243,8 @@ class Nivel
   vector<Jugador> listaContrincantes;
   int numObjetos;
   vector<Objeto*> listaObjetos;
+  vector<Disco> listaDiscos;
+  Punto limitesJuego;
 
   Nivel() 
     {
@@ -217,6 +255,8 @@ class Nivel
       listaContrincantes = vector<Jugador>();
       numObjetos = 0;
       listaObjetos = vector<Objeto*>();
+      listaDiscos = vector<Disco>(numContrincantes + 1, Disco());
+      limitesJuego = Punto();
     }
   
   Nivel(int ident, int t, Jugador jug, int nContr,
@@ -230,11 +270,22 @@ class Nivel
       listaContrincantes = listContr;
       numObjetos = nObjetos;
       listaObjetos = listObj;
+      limitesJuego = Punto();
+      // Inicializar los discos
+      // Jugador 
+      listaDiscos.push_back(Disco(j.posActual));
+      // Contrincantes
+      for(int i = 0; i < numContrincantes; i++) 
+        {
+          listaDiscos.push_back(Disco(listaContrincantes[i].posActual));
+        }
     }
 
   void dibujarTrayectoriaC();
-  void dibujarJugadores(double *incr);
+  void dibujarJugadores();
   void dibujarObstaculos();
+  void dibujarDiscos();
+  void setLimite(double x, double y);
   void Print();
 };
 

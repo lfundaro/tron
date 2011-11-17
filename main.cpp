@@ -312,7 +312,6 @@ double mouJueZ = 1;
 int nivelActual = 0;
 Punto posActualJugador;
 vector<Punto> posContrincante;
-double incr = 0.001;
 
 void
 display(void)
@@ -346,10 +345,11 @@ display(void)
   j.listaNiveles[nivelActual].j.dibujarTrayectoriaJ();
   j.listaNiveles[nivelActual].dibujarTrayectoriaC();
   // Dibujar jugadores en posición inicial
-  j.listaNiveles[nivelActual].dibujarJugadores(&incr);
+  j.listaNiveles[nivelActual].dibujarJugadores();
   // Dibujar obstáculos
   j.listaNiveles[nivelActual].dibujarObstaculos();
-  //  sleep(2);
+  // Dibujar discos
+  j.listaNiveles[nivelActual].dibujarDiscos();
   glutPostRedisplay();
   glutSwapBuffers();
   glFlush ();
@@ -467,6 +467,11 @@ main (int argc, char **argv)
   /* Abrir archivo e inicializar estructuras de juego */
   char *archivo = argv[1];
   j = parse(archivo);
+  /* Límites del juego */
+  for(int i = 0; i < j.numNiveles; i++)
+    {
+      j.listaNiveles[i].setLimite((double) tamX, (double) tamY);
+    }
   /* Inicialización de ventana */
   glutInit(&argc, argv);
   glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB |  GLUT_DEPTH);

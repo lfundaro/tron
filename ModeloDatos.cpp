@@ -49,6 +49,18 @@ void Trayectoria::actLambdaY(double val)
   return;
 }
 
+void Disco::cambiarModo()
+{
+  tiroDirecto = (tiroDirecto + 1) % 2;
+  return;
+}
+
+void Disco::decVida() 
+{
+  vida--;
+  return;
+}
+
 double Trayectoria::normalizarD(double desplazamiento)
 {
   double d =sqrt(pow(listaPuntos[(origen + 1) % numPuntos].getX() - 
@@ -66,10 +78,7 @@ double Trayectoria::calcDesp(double velocidad)
   double difft = difftime(now,timeStamp);
   if (difft >= 1.0) 
     {
-      cout.precision(15);
-      cout << "diferenciaT = " << difft << endl;
       desp = velocidad*(difft);
-      cout << "desplazamiento " << desp << endl;
       time(&timeStamp);
     }
   return desp;
@@ -77,8 +86,6 @@ double Trayectoria::calcDesp(double velocidad)
 
 void Trayectoria::ecuacionRecta(Punto *posActual)
 {
-  cout.precision(15);
-  cout << "velocidad = " << velocidad << endl;
   double desplazamiento = calcDesp(velocidad/**1/60.0*/);
   if (desplazamiento > 0.0) {
     double norm = normalizarD(desplazamiento);
@@ -124,7 +131,38 @@ void Trayectoria::calcularTrayectoria(Punto *posActual)
   return;
 }
 
-void Jugador::dibujarJugador(double *incr) 
+void Disco::dibujarDisco(Punto posActual)
+{
+  glPushMatrix();
+  if (enCurso) 
+    {
+      cout << "Velocidad disco?" << endl;
+    }
+  else  // Disco con el jugador
+    {
+      glColor3f(1.0, 69.0/255.0, 0.0); // Naranja
+      glTranslatef(posActual.getX(), posActual.getY(), 0.0);
+      glutSolidTorus(RAD_INT_TORUS, RAD_EXT_TORUS, 20, 20);
+    }
+  glPopMatrix();
+  return;
+}
+
+void Nivel::dibujarDiscos()
+{
+  // Dibujar disco del jugador
+  listaDiscos[0].dibujarDisco(j.posActual);
+  int i = 0;
+  for(vector<Disco>::iterator it = listaDiscos.begin() + 1;
+      it != listaDiscos.end(); ++it)
+    {
+      (*it).dibujarDisco(listaContrincantes[i].posActual);
+      i++;
+    }
+  return;
+}
+
+void Jugador::dibujarJugador() 
 {
   glPushMatrix();
   glColor3f(0.2,0.9,0.5);
@@ -145,16 +183,14 @@ void Jugador::dibujarJugador(double *incr)
   glPopMatrix();
 }
 
-void Nivel::dibujarJugadores(double *incr)
+void Nivel::dibujarJugadores()
 {
   // Dibujamos el jugador
-  cout << "Jugador" << endl;
-  j.dibujarJugador(incr);
+  j.dibujarJugador();
   // Dibujar contrincantes
   for(int i = 0; i < numContrincantes; i++) 
     {
-      cout << "Contrincante = " << i << endl;
-      listaContrincantes[i].dibujarJugador(incr);
+      listaContrincantes[i].dibujarJugador();
     }
 }
 
@@ -208,6 +244,12 @@ void Nivel::dibujarObstaculos()
     }
 }
 
+void Objeto::decVida()
+{
+  vida--;
+  return;
+}
+
 // Dibujar trayectoria de jugador
 void Jugador::dibujarTrayectoriaJ() 
 {
@@ -234,6 +276,12 @@ void Jugador::dibujarTrayectoriaJ()
       glEnd();
       glPopMatrix();
     }
+  return;
+}
+
+void Nivel::setLimite(double x, double y)
+{
+  limitesJuego = Punto(x,y);
   return;
 }
 
