@@ -42,7 +42,8 @@ Jugador parseJugador(TiXmlHandle rootJugador)
   double disp = atof(pElem->GetText());
   TiXmlHandle rootTrayectoria(rootJugador.FirstChild("trayectoria").Element());
   Trayectoria tr = parseTrayectoria(rootTrayectoria);
-  Jugador jug(disp,tr);
+  Punto posInicial = tr.listaPuntos[0];
+  Jugador jug(disp,tr, posInicial);
   return jug;
 }
 

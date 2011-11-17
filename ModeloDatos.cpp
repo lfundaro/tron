@@ -24,6 +24,121 @@ double Punto::getY()
   return y;
 }
 
+// Setters de punto
+void Punto::setX(double nuevoVal)
+{
+  x = nuevoVal;
+  return;
+}
+
+void Punto::setY(double nuevoVal)
+{
+  y = nuevoVal;
+  return;
+}
+
+void Trayectoria::actLambdaX(double val)
+{
+  lambdaX += val;
+  return;
+}
+
+void Trayectoria::actLambdaY(double val)
+{
+  lambdaY += val;
+  return;
+}
+
+double Trayectoria::normalizarV(double velocidad)
+{
+  double d =sqrt(pow(listaPuntos[(origen + 1) % numPuntos].getX() - 
+                     listaPuntos[origen].getX(),2) +
+                 pow(listaPuntos[(origen + 1) % numPuntos].getY() - 
+                     listaPuntos[origen].getY(),2));
+  return velocidad / d;
+}
+
+double Trayectoria::ecuacionRectaX()
+{
+  double diff = normalizarV(/*velocidad*1.0/60.0*/0.2);
+  double x_prima = listaPuntos[origen].getX() + (lambdaX + diff)*
+    (listaPuntos[(origen + 1) % numPuntos].getX() - listaPuntos[origen].getX()); 
+  actLambdaX(diff);
+  return x_prima;
+}
+
+double Trayectoria::ecuacionRectaY()
+{
+  double diff = normalizarV(/*velocidad*1.0/60.0*/0.2);
+  double y_prima = listaPuntos[origen].getY() + (lambdaY + diff)*
+    (listaPuntos[(origen + 1) % numPuntos].getY() - listaPuntos[origen].getY()); 
+  actLambdaY(diff);
+  return y_prima;
+}
+
+int Trayectoria::cambiarOrigen()
+{
+  if (lambdaX >= 1.0 || lambdaY >= 1.0) 
+    {
+      // Cambiar origen
+      origen = (origen + 1) % numPuntos;
+      return 1;
+    }
+  return 0;
+}
+
+void Trayectoria::calcularNuevaPosicion(Punto *posActual)
+{
+  posActual->setX(ecuacionRectaX());
+  posActual->setY(ecuacionRectaY());
+  return;
+}
+
+void Trayectoria::lambdaReset()
+{
+  lambdaX = 0.0;
+  lambdaY = 0.0;
+  return;
+}
+
+void Trayectoria::calcularTrayectoria(Punto *posActual) 
+{
+  if (cambiarOrigen()) {lambdaReset();}
+  calcularNuevaPosicion(posActual);
+  return;
+}
+
+void Jugador::dibujarJugador(double *incr) 
+{
+  glPushMatrix();
+  glColor3f(0.2,0.9,0.5);
+  // Jugador con un sólo punto en la trayectoria
+  if (t.numPuntos == 1) 
+    {
+      glTranslatef(posActual.getX(), posActual.getY(), 0.0);
+      glutSolidSphere(0.5, 20.0,20.0);
+    }
+  else  // Múltiples puntos
+    {
+      // Punto de origen -- Punto destino ?
+      t.calcularTrayectoria(&posActual);
+      glColor3f(1.0,0.0,0.0);
+      glTranslatef(posActual.getX(), posActual.getY(), 0.0);
+      glutSolidSphere(0.5, 20.0,20.0);
+    }
+  glPopMatrix();
+}
+
+void Nivel::dibujarJugadores(double *incr)
+{
+  // Dibujamos el jugador
+  j.dibujarJugador(incr);
+  // Dibujar contrincantes
+  for(int i = 0; i < numContrincantes; i++) 
+    {
+      listaContrincantes[i].dibujarJugador(incr);
+    }
+}
 
 // Dibujar trayectoria de jugador
 void Jugador::dibujarTrayectoriaJ() 
