@@ -342,9 +342,9 @@ int nivelActual = 0;
 Punto posActualJugador;
 vector<Punto> posContrincante;
 double incr = 0.001;
-GLfloat ambiente[] = { 0.2*tamX, 0.2*tamY, 0.2, 1.0 };
-GLfloat difusa[] = { 0.5*tamX, 0.5*tamY, 0.5, 1.0 };
-GLfloat especular[] = { 0.8*tamX, 0.8*tamY, 0.8, 1.0 };
+GLfloat ambiente[] = { 0.01*tamX, 0.02*tamY, 0.02, 1.0 };
+GLfloat difusa[] = { 0.05*tamX, 0.05*tamY, 0.05, 1.0 };
+GLfloat especular[] = { 0.08*tamX, 0.08*tamY, 0.08, 1.0 };
 GLfloat posicion[] = { 0.5*tamX,0.5*tamY,0.3,0.0};
 
 
