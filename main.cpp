@@ -12,6 +12,7 @@
 #include "GLCamera.h"
 #include "ICP.h"
 #include <unistd.h>
+#include "Camara.h"
 
 using namespace std;
 
@@ -314,6 +315,9 @@ Punto posActualJugador;
 vector<Punto> posContrincante;
 float zoom = 90.0;
 #define ZOOM_FACTOR 1.0
+Camara cam = Camara((tamY+2)/10*6,-tamX+2/3, (-tamY+2)/20);
+GLfloat camUpDown = 0.0;
+GLfloat rot = 0.0;
 
 void
 display(void)
@@ -322,22 +326,24 @@ display(void)
   glMatrixMode(GL_MODELVIEW);
   /* Coordenad=as del sistema */
   glLoadIdentity();
+  cam.go(tamX, tamY, giroH, giroV);
   //gluLookAt (0.0, (-x)/10.0,(-x)/10*6, 0.0,(-y)/20.0,(-x)/3.0, 0.0, 0.0,-1.0);
-  if (tamX == tamY) {
-  gluLookAt (0.0, (-(tamX+2))/10, (tamY+2)/10*6,
-             0.0+giroH, giroV+(-(tamY+2))/20, (-(tamX+2))/3,
-             0.0,1, 0.0);
-  } else if (tamX < tamY) {
-  gluLookAt (0.0, (-(tamY+2))/10, (tamY+2)/10*6,
-             0.0+giroH, giroV+(-(tamY+2))/20, (-(tamY+2))/3,
-             0.0,1, 0.0);
-  } else {
-  gluLookAt (0.0, (-(tamX+2))/10, (tamX+2)/10*6,
-             0.0+giroH, giroV+(-(tamX+2))/20, (-(tamX+2))/3,
-             0.0,1, 0.0);
-  }
+  // if (tamX == tamY) {
+  // gluLookAt (0.0, (-(tamX+2))/10, (tamY+2)/10*6,
+  //            0.0+giroH, giroV+(-(tamY+2))/20, (-(tamX+2))/3,
+  //            0.0,1, 0.0);
+  // } else if (tamX < tamY) {
+  // gluLookAt (0.0, (-(tamY+2))/10, (tamY+2)/10*6,
+  //            0.0+giroH, giroV+(-(tamY+2))/20, (-(tamY+2))/3,
+  //            0.0,1, 0.0);
+  // } else {
+  // gluLookAt (0.0, (-(tamX+2))/10, (tamX+2)/10*6,
+  //            0.0+giroH, giroV+(-(tamX+2))/20, (-(tamX+2))/3,
+  //            0.0,1, 0.0);
+  // }
 
-  glTranslatef((-tamX)/2,(-tamY)/2,0.0);
+  glTranslatef((-tamX)/2,(-tamY)/2,camUpDown);
+  glRotatef(rot, 0.0,0.0,1.0);
 
   /* Tablero */
   dibujarMira(mouJueX,mouJueY,1.0,1.0,0.0);
@@ -397,20 +403,20 @@ flechas(int key, int x, int y)
 {
   switch(key) {
   case GLUT_KEY_LEFT:
-    if (giroH > -9)
-      giroH -= 0.1;
+    //    if (giroH > -9)
+      giroH -= 1.0;
     break;
   case GLUT_KEY_RIGHT:
-    if (giroH < 9)
-      giroH += 0.1;
+    //    if (giroH < 9)
+      giroH += 1.0;
     break;
   case GLUT_KEY_DOWN:
-    if (giroV > -9)
-      giroV -= 0.1;
+    //    if (giroV > -9)
+      giroV -= 1.0;
     break;
   case GLUT_KEY_UP:
-    if (giroV < 9)
-      giroV += 0.1;
+    //    if (giroV < 9)
+      giroV += 1.0;
     break;
   }
   mouVenX = x;
@@ -452,7 +458,7 @@ void teclaZoomIn()
 {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  zoom += ZOOM_FACTOR;
+  zoom -= ZOOM_FACTOR;
   gluPerspective(zoom, 1, 0.5, 100.0);
   glMatrixMode(GL_MODELVIEW);
 }
@@ -461,9 +467,29 @@ void teclaZoomOut()
 {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  zoom -= ZOOM_FACTOR;
+  zoom += ZOOM_FACTOR;
   gluPerspective(zoom, 1, 0.5, 100.0);
   glMatrixMode(GL_MODELVIEW);
+}
+
+void teclaCamUp()
+{
+  camUpDown -= 0.5;
+}
+
+void teclaCamDown()
+{
+  camUpDown += 0.5;
+}
+
+void teclaRotIzq()
+{
+  rot -= 3.0;
+}
+
+void teclaRotDer()
+{
+  rot += 3.0;
 }
 
 void
@@ -480,6 +506,18 @@ keyboard (unsigned char key, int x, int y)
       break;
     case 'O': case 'o':
       teclaZoomOut();
+      break;
+    case 'U': case 'u': 
+      teclaCamUp();
+      break;
+    case 'D': case 'd':
+      teclaCamDown();
+      break;
+    case 'A': case 'a':
+      teclaRotIzq();
+      break;
+    case 'S': case 's':
+      teclaRotDer();
       break;
     default:
       printf("Didnt match\n");

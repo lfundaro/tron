@@ -1,7 +1,7 @@
 GCC = g++
 OPS = -g
 LINK_OPS = -lglut -lGL -lGLU -lX11  -lm -L/usr/X11R6/lib
-OBJS = main.o Parser.o tinystr.o tinyxml.o tinyxmlerror.o tinyxmlparser.o ModeloDatos.o Elementos.o GLCamera.o ICP.o TriMesh_io.o KDtree.o TriMesh_normals.o TriMesh_bounding.o TriMesh_connectivity.o TriMesh_curvature.o TriMesh_grid.o TriMesh_pointareas.o TriMesh_stats.o TriMesh_tstrips.o remove.o reorder_verts.o
+OBJS = main.o Parser.o tinystr.o tinyxml.o tinyxmlerror.o tinyxmlparser.o ModeloDatos.o Elementos.o GLCamera.o ICP.o TriMesh_io.o KDtree.o TriMesh_normals.o TriMesh_bounding.o TriMesh_connectivity.o TriMesh_curvature.o TriMesh_grid.o TriMesh_pointareas.o TriMesh_stats.o TriMesh_tstrips.o remove.o reorder_verts.o Camara.o
 TEST_OBJS = 
 
 all: $(OBJS) Makefile
@@ -9,6 +9,9 @@ all: $(OBJS) Makefile
 
 main.o : main.cpp
 	$(GCC) $(OPS) -c main.cpp
+
+Camara.o : Camara.cpp
+	$(GCC) $(OPS) -c Camara.cpp
 
 Parser.o : Parser.cpp
 	$(GCC) $(OPS) -c Parser.cpp
