@@ -328,8 +328,8 @@ void do_icp(int n)
 /* Fin Código Trimesh */
 
 Juego j;
-float tamX = 100.0;
-float tamY = 100.0;
+float tamX = 10.0;
+float tamY = 10.0;
 float tamZ = 2.0;
 float giroH = 0;
 float giroV = 0;
@@ -342,6 +342,11 @@ int nivelActual = 0;
 Punto posActualJugador;
 vector<Punto> posContrincante;
 double incr = 0.001;
+GLfloat ambiente[] = { 0.2*tamX, 0.2*tamY, 0.2, 1.0 };
+GLfloat difusa[] = { 0.5*tamX, 0.5*tamY, 0.5, 1.0 };
+GLfloat especular[] = { 0.8*tamX, 0.8*tamY, 0.8, 1.0 };
+GLfloat posicion[] = { 0.5*tamX,0.5*tamY,0.3,0.0};
+
 
 static GLuint texName;
 int iheight, iwidth;
@@ -359,7 +364,6 @@ display(void)
   /* Coordenad=as del sistema */
   glLoadIdentity();
   //gluLookAt (0.0, (-x)/10.0,(-x)/10*6, 0.0,(-y)/20.0,(-x)/3.0, 0.0, 0.0,-1.0);
-
 
   if (tamX == tamY) {
   gluLookAt (0.0, (-(tamX+2))/10, (tamY+2)/10*6,
@@ -390,11 +394,11 @@ display(void)
   dibujarParedes(tamX,tamY,tamZ);
   glDisable(GL_TEXTURE_2D);
 
-
+  glLightfv(GL_LIGHT0, GL_POSITION, ambiente);
+  glLightfv(GL_LIGHT0, GL_POSITION, difusa);
+  glLightfv(GL_LIGHT0, GL_POSITION, especular);
+  glLightfv(GL_LIGHT0, GL_POSITION, posicion);
   dibujarTablero(tamX,tamY,tamZ);
-
-  //  dibujarTablero(tamX,tamY);
-
 
   redraw();
   // Dibujar trayectoria de Jugador
@@ -419,6 +423,8 @@ reshape (int w, int h)
   glLoadIdentity();
   gluPerspective(90.0f, 1, 0.5, 100.0);
   glMatrixMode(GL_MODELVIEW);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
 }
 
 void
@@ -586,6 +592,7 @@ main (int argc, char **argv)
   glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST);
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   textureInit();
+
   /* Directivas para graficar */
   glutReshapeFunc(reshape);
   glutDisplayFunc(display);
