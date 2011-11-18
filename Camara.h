@@ -1,5 +1,7 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <iostream>
+#include "ModeloDatos.h"
 
 class Camara
 {
@@ -16,5 +18,7 @@ class Camara
     upVector = 1.0;
   }
 
-  void go(float tamX, float tamY, float giroH, float giroV);
+  void go(float tamX, float tamY, float giroH, float giroV,
+          float avanceX, float avanceY, float camUpDown);
+  
 };

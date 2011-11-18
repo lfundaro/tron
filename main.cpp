@@ -328,24 +328,10 @@ display(void)
   glMatrixMode(GL_MODELVIEW);
   /* Coordenad=as del sistema */
   glLoadIdentity();
-  cam.go(tamX, tamY, giroH, giroV);
-  //gluLookAt (0.0, (-x)/10.0,(-x)/10*6, 0.0,(-y)/20.0,(-x)/3.0, 0.0, 0.0,-1.0);
-  // if (tamX == tamY) {
-  // gluLookAt (0.0, (-(tamX+2))/10, (tamY+2)/10*6,
-  //            0.0+giroH, giroV+(-(tamY+2))/20, (-(tamX+2))/3,
-  //            0.0,1, 0.0);
-  // } else if (tamX < tamY) {
-  // gluLookAt (0.0, (-(tamY+2))/10, (tamY+2)/10*6,
-  //            0.0+giroH, giroV+(-(tamY+2))/20, (-(tamY+2))/3,
-  //            0.0,1, 0.0);
-  // } else {
-  // gluLookAt (0.0, (-(tamX+2))/10, (tamX+2)/10*6,
-  //            0.0+giroH, giroV+(-(tamX+2))/20, (-(tamX+2))/3,
-  //            0.0,1, 0.0);
-  // }
+  cam.go(tamX, tamY, giroH, giroV, avanceX, avanceY, camUpDown);
 
-  glTranslatef((-tamX)/2 + avanceX,(-tamY)/2 + avanceY,camUpDown);
-  glRotatef(rot, 0.0,0.0,camUpDown);
+  //gluLookAt (0.0, (-x)/10.0,(-x)/10*6, 0.0,(-y)/20.0,(-x)/3.0, 0.0, 0.0,-1.0);
+  glRotatef(rot, 0.0,0.0,1.0);
 
   /* Tablero */
   dibujarMira(mouJueX,mouJueY,1.0,1.0,0.0);
@@ -444,7 +430,7 @@ accionMouse(int key, int state, int x, int y)
     switch(state){
     case GLUT_UP:
       proyectarMouse(x,y);
-      //     printf("Dispare en (%d,%d)\n",x,y);
+      //      printf("Dispare en (%d,%d)\n",x,y);
       break;
     }
     break;
