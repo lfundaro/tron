@@ -301,8 +301,8 @@ void do_icp(int n)
 /* Fin Código Trimesh */
 
 Juego j;
-float tamX = 90.0;
-float tamY = 90.0;
+float tamX = 100.0;
+float tamY = 100.0;
 float giroH = 0;
 float giroV = 0;
 int mouVenX = 0;
@@ -318,6 +318,8 @@ float zoom = 90.0;
 Camara cam = Camara((tamY+2)/10*6,-tamX+2/3, (-tamY+2)/20);
 GLfloat camUpDown = 0.0;
 GLfloat rot = 0.0;
+GLfloat avanceX = 0.0;
+GLfloat avanceY = 0.0;
 
 void
 display(void)
@@ -342,8 +344,8 @@ display(void)
   //            0.0,1, 0.0);
   // }
 
-  glTranslatef((-tamX)/2,(-tamY)/2,camUpDown);
-  glRotatef(rot, 0.0,0.0,1.0);
+  glTranslatef((-tamX)/2 + avanceX,(-tamY)/2 + avanceY,camUpDown);
+  glRotatef(rot, 0.0,0.0,camUpDown);
 
   /* Tablero */
   dibujarMira(mouJueX,mouJueY,1.0,1.0,0.0);
@@ -404,19 +406,19 @@ flechas(int key, int x, int y)
   switch(key) {
   case GLUT_KEY_LEFT:
     //    if (giroH > -9)
-      giroH -= 1.0;
+      giroH -= 2.0;
     break;
   case GLUT_KEY_RIGHT:
     //    if (giroH < 9)
-      giroH += 1.0;
+      giroH += 2.0;
     break;
   case GLUT_KEY_DOWN:
     //    if (giroV > -9)
-      giroV -= 1.0;
+      giroV -= 2.0;
     break;
   case GLUT_KEY_UP:
     //    if (giroV < 9)
-      giroV += 1.0;
+      giroV += 2.0;
     break;
   }
   mouVenX = x;
@@ -492,6 +494,26 @@ void teclaRotDer()
   rot += 3.0;
 }
 
+void teclaTrasXIzq()
+{
+  avanceX += 0.5; 
+}
+
+void teclaTrasXDer()
+{
+  avanceX -= 0.5;
+}
+
+void teclaTrasYDer()
+{
+  avanceY -= 0.5;
+}
+
+void teclaTrasYIzq()
+{
+  avanceY += 0.5;
+}
+
 void
 keyboard (unsigned char key, int x, int y) 
 {
@@ -518,6 +540,18 @@ keyboard (unsigned char key, int x, int y)
       break;
     case 'S': case 's':
       teclaRotDer();
+      break;
+    case 'F': case 'f': 
+      teclaTrasXIzq();
+      break;
+    case 'G': case 'g':
+      teclaTrasXDer();
+      break;
+    case 'B': case 'b': 
+      teclaTrasYIzq();
+      break;
+    case 'N': case 'n':
+      teclaTrasYDer();
       break;
     default:
       printf("Didnt match\n");
